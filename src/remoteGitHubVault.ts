@@ -69,14 +69,14 @@ export class RemoteGitHubVault implements IVault<"remote"> {
 	private latestKnownCommitSha: CommitSha | null = null;
 	private latestKnownState: FileStates | null = null;
 
-	/** @param githubHost - Enterprise Server host; empty means github.com */
+	/** @param githubHost - Hostname to sync with, e.g. "github.com" or a GitHub Enterprise Server */
 	constructor(
 		pat: string,
 		owner: string,
 		repo: string,
 		branch: string,
 		deviceName: string,
-		githubHost = ""
+		githubHost: string
 	) {
 		// Use Octokit with retry plugin for enhanced rate limiting handling
 		const OctokitWithRetry = Octokit.plugin(retry);

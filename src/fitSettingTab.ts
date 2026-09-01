@@ -365,7 +365,7 @@ export default class FitSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('GitHub host (advanced)')
-			.setDesc('If using a GitHub Enterprise Server enter the host, leave blank for github.com')
+			.setDesc('Default: github.com')
 			.addText(text => text
 				.setPlaceholder('github.com')
 				.setValue(this.plugin.settings.githubHost)

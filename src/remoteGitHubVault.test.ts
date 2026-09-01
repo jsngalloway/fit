@@ -38,7 +38,8 @@ describe("RemoteGitHubVault", () => {
 			"testowner",
 			"testrepo",
 			"main",
-			"test-device"
+			"test-device",
+			"github.com"
 		);
 	});
 
@@ -52,12 +53,6 @@ describe("RemoteGitHubVault", () => {
 			new RemoteGitHubVault("fake-pat-token", "testowner", "testrepo", "main", "test-device", "github.example.com");
 
 			expect(__getLastOctokitOptions()?.baseUrl).toBe("https://github.example.com/api/v3");
-		});
-
-		it("should target api.github.com when no host is configured", () => {
-			new RemoteGitHubVault("fake-pat-token", "testowner", "testrepo", "main", "test-device");
-
-			expect(__getLastOctokitOptions()?.baseUrl).toBe("https://api.github.com");
 		});
 	});
 

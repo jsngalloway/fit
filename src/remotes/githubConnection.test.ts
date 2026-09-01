@@ -3,8 +3,8 @@ import { GitHubConnection } from './githubConnection';
 import { __getLastOctokitOptions } from '../__mocks__/@octokit/core';
 
 describe('GitHubConnection', () => {
-	it('targets api.github.com when no host is configured', () => {
-		new GitHubConnection('fake-pat');
+	it('targets api.github.com', () => {
+		new GitHubConnection('fake-pat', "github.com");
 		expect(__getLastOctokitOptions()?.baseUrl).toBe('https://api.github.com');
 	});
 

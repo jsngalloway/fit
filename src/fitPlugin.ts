@@ -421,10 +421,10 @@ export default class FitPlugin extends Plugin {
 
 		const explanation = await this.fitSync.explainStatus();
 
-		const { owner, repo, autoSync, checkEveryXMinutes } = this.settings;
+		const { owner, repo, autoSync, checkEveryXMinutes, githubHost } = this.settings;
 		const sha = this.localStore.lastFetchedCommitSha;
 		const commitUrl = (owner && repo && sha)
-			? treeUrl(this.settings.githubHost, owner, repo, sha)
+			? treeUrl(githubHost, owner, repo, sha)
 			: null;
 		const autoSyncInfo: AutoSyncInfo = {
 			enabled: autoSync !== 'off',

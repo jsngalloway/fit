@@ -40,7 +40,7 @@ export class ConnectionConfigError extends Error {
  * Handles authentication, repository discovery, and Octokit instance management.
  *
  * Usage:
- *   const conn = new GitHubConnection(pat);
+ *   const conn = new GitHubConnection(pat, githubHost);
  *   const user = await conn.getAuthenticatedUser();
  *   const repos = await conn.getReposForOwner(user.owner);
  */
@@ -52,8 +52,8 @@ export class GitHubConnection {
 	// Cached authenticated user info (populated on first getAuthenticatedUser call)
 	private cachedAuthUser: AuthenticatedUser | null = null;
 
-	/** @param githubHost - Enterprise Server host; empty means github.com */
-	constructor(pat: string, githubHost = "") {
+	/** @param githubHost - Hostname to connect to */
+	constructor(pat: string, githubHost: string) {
 		this.pat = pat;
 		const OctokitWithRetry = Octokit.plugin(retry);
 		this.octokit = new OctokitWithRetry({
