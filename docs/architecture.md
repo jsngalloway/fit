@@ -239,7 +239,7 @@ interface IVault {
 
 **Current implementations**:
 - `LocalVault`: Obsidian vault
-- `RemoteGitHubVault`: GitHub repositories (github.com and GitHub Enterprise Server)
+- `RemoteGitHubVault`: GitHub repositories
 
 ### Custom Conflict Resolution
 Extend `FitSync` class to implement custom conflict resolution strategies:
