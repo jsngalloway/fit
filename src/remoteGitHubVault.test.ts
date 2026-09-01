@@ -6,7 +6,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { RemoteGitHubVault, TreeNode } from "./remoteGitHubVault";
 import { BlobSha, CommitSha, EMPTY_TREE_SHA, TreeSha } from "./util/hashing";
 import { FakeOctokit } from "./testUtils";
-import { __setMockOctokitInstance } from "./__mocks__/@octokit/core";
+import { __getLastOctokitOptions, __setMockOctokitInstance } from "./__mocks__/@octokit/core";
 import { FileContent } from "./util/contentEncoding";
 import { fitLogger } from "./logger";
 import { init as initEncryption } from "./encryption";
@@ -45,6 +45,20 @@ describe("RemoteGitHubVault", () => {
 	afterEach(() => {
 		__setMockOctokitInstance(null);
 		vi.restoreAllMocks();
+	});
+
+	describe("Client Configuration", () => {
+		it("should target the instance API when a GitHub Enterprise Server host is configured", () => {
+			new RemoteGitHubVault("fake-pat-token", "testowner", "testrepo", "main", "test-device", "github.example.com");
+
+			expect(__getLastOctokitOptions()?.baseUrl).toBe("https://github.example.com/api/v3");
+		});
+
+		it("should target api.github.com when no host is configured", () => {
+			new RemoteGitHubVault("fake-pat-token", "testowner", "testrepo", "main", "test-device");
+
+			expect(__getLastOctokitOptions()?.baseUrl).toBe("https://api.github.com");
+		});
 	});
 
 	describe("Read Operations", () => {

@@ -45,6 +45,7 @@ describe('FitSync', () => {
 	// Realistic settings that get passed through to RemoteGitHubVault
 	const testSettings = {
 		pat: 'fake-test-token',
+		githubHost: '',
 		owner: 'test-owner',
 		repo: 'test-repo',
 		branch: 'test-branch',

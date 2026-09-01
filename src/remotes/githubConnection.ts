@@ -14,6 +14,7 @@
 
 import { Octokit } from "@octokit/core";
 import { retry } from "@octokit/plugin-retry";
+import { resolveGitHubHost } from "./githubHost";
 import { VaultError } from "../vault";
 
 /**
@@ -51,11 +52,16 @@ export class GitHubConnection {
 	// Cached authenticated user info (populated on first getAuthenticatedUser call)
 	private cachedAuthUser: AuthenticatedUser | null = null;
 
-	constructor(pat: string) {
+	/**
+	 * @param pat - Personal access token
+	 * @param githubHost - github server host, defaults to github.com
+	 */
+	constructor(pat: string, githubHost = "") {
 		this.pat = pat;
 		const OctokitWithRetry = Octokit.plugin(retry);
 		this.octokit = new OctokitWithRetry({
 			auth: pat,
+			baseUrl: resolveGitHubHost(githubHost).apiBaseUrl,
 			request: {
 				retries: 3,
 				doNotRetry: [400, 401, 403, 404, 422]

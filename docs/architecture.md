@@ -94,10 +94,10 @@ Both local and remote caches use the canonical Git blob SHA format: `SHA1("blob 
   - Handles both sync and push-only operations
 
 **Remote Backend Integration**:
-- Current implementation: GitHub backend with two components:
+- Current implementation: GitHub backend with three components:
   - `GitHubConnection`: PAT-based operations (authentication, repo/branch discovery) for settings UI
   - `RemoteGitHubVault`: Repository-specific sync operations using `@octokit/core` with automatic retry handling
-- Architecture supports adding GitLab/Gitea backends via IVault interface (would require corresponding connection classes)
+  - `githubHost` is resolved with the `resolveGitHubHost()` function which returns the API url for Octokit to use. This is designed for both github.com & github enterprise server since they use the same API
 
 ### Support Systems
 - **FitLogger**: Cross-platform diagnostic logging (enabled by default, writes to `.obsidian/plugins/fit/debug.log`)
@@ -239,7 +239,7 @@ interface IVault {
 
 **Current implementations**:
 - `LocalVault`: Obsidian vault
-- `RemoteGitHubVault`: GitHub repositories
+- `RemoteGitHubVault`: GitHub repositories (github.com and GitHub Enterprise Server)
 
 ### Custom Conflict Resolution
 Extend `FitSync` class to implement custom conflict resolution strategies:

@@ -17,7 +17,7 @@ import FitSettingTab from './fitSettingTab';
 import { FitLogger } from './logger';
 import { findNewFields } from '@/fitSettings';
 
-const EMPTY_SETTINGS = { pat: '', avatarUrl: '', owner: '', repo: '', branch: '' };
+const EMPTY_SETTINGS = { pat: '', githubHost: '', avatarUrl: '', owner: '', repo: '', branch: '' };
 
 // Helper functions to find elements by their user-visible labels
 function findInputByLabel(container: HTMLElement, labelText: string): HTMLInputElement | null {
@@ -282,17 +282,20 @@ describe('FitSettingTab - GitHub settings', () => {
 		expect(branches).toEqual(['main', 'develop', 'feature-x']);
 	});
 
-	it('should generate correct GitHub link for owner/repo/branch', async () => {
+	it.each([
+		['', 'https://github.com/bob/project-x/tree/feature-123'],
+		['github.example.com', 'https://github.example.com/bob/project-x/tree/feature-123'],
+	])('should generate correct GitHub link for owner/repo/branch on host %j', async (githubHost, expectedLink) => {
 		const fakePlugin: any = {
 			githubConnection: null,
-			settings: { owner: 'bob', repo: 'project-x', branch: 'feature-123' },
+			settings: { githubHost, owner: 'bob', repo: 'project-x', branch: 'feature-123' },
 			logger: mockLogger
 		};
 
 		const settingTab = new FitSettingTab({} as any, fakePlugin);
 
 		// Verify: Link uses settings values
-		expect(settingTab.getLatestLink()).toBe('https://github.com/bob/project-x/tree/feature-123');
+		expect(settingTab.getLatestLink()).toBe(expectedLink);
 	});
 
 	it('should clear branches when fetching fails (repo not found)', async () => {
