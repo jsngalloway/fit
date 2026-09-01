@@ -369,7 +369,7 @@ export default class FitSettingTab extends PluginSettingTab {
 			.addText(text => text
 				.setPlaceholder('github.com')
 				.setValue(this.plugin.settings.githubHost)
-				.onChange(async (value) => {
+				.onChange((value) => {
 					this.plugin.settings.githubHost = value;
 					// Suggestions and the authenticated user belong to the previous host.
 					// Owner/repo/branch are left alone - they are still what the user asked to sync.
@@ -377,7 +377,7 @@ export default class FitSettingTab extends PluginSettingTab {
 					this.suggestedOwners = [];
 					this.ownerSuggest?.updateSuggestions([]);
 					this.repoSuggest?.updateSuggestions([]);
-					await this.plugin.saveSettings();
+					this.debouncedSaveSettings();
 				}));
 	};
 
