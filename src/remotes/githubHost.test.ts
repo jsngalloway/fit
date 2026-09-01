@@ -18,10 +18,11 @@ describe('resolveGitHubHost', () => {
 });
 
 describe('web URLs', () => {
-	it('links the classic token page on Enterprise Server, fine-grained on github.com', () => {
+	it('links the classic token page on every host', () => {
 		expect(tokenCreationUrl(resolveGitHubHost('github.example.com')))
 			.toBe('https://github.example.com/settings/tokens/new?description=Obsidian%20FIT&scopes=repo');
-		expect(tokenCreationUrl(resolveGitHubHost(''))).toContain('https://github.com/settings/personal-access-tokens/new');
+		expect(tokenCreationUrl(resolveGitHubHost('')))
+			.toBe('https://github.com/settings/tokens/new?description=Obsidian%20FIT&scopes=repo');
 	});
 
 	it('builds tree URLs on the configured host', () => {

@@ -1,13 +1,8 @@
 /**
  * GitHub Host Resolution
  *
- * Resolves the configured host into the API base URL used by Octokit and the web
- * base URL used for browser links. GitHub Enterprise Server serves the same v3
- * REST API as github.com under /api/v3, so pointing both at a different origin is
- * all that separates a self-hosted instance from github.com.
- *
- * Note: this is host resolution for GitHub only, not provider selection. GitLab and
- * Gitea need different API clients — see the TODO in githubConnection.ts.
+ * Resolves the configured host into the API base URL used by Octokit
+ * this handles differentiating github.com and self-hosted github instances - though they use the same api
  */
 
 export const DOTCOM_HOST = "github.com";
@@ -23,6 +18,7 @@ export interface GitHubHostUrls {
 	isEnterprise: boolean;
 }
 
+// default hosts used when a specific host is not specified
 const DOTCOM_URLS: GitHubHostUrls = {
 	host: DOTCOM_HOST,
 	apiBaseUrl: "https://api.github.com",
@@ -31,12 +27,10 @@ const DOTCOM_URLS: GitHubHostUrls = {
 };
 
 /**
- * Resolve the githubHost setting into API and web base URLs.
- *
- * Accepts bare hostnames ("github.example.com"), full URLs ("https://github.example.com")
- * and API URLs ("https://github.example.com/api/v3"), since users copy whichever of the
- * three they have at hand. An explicit http:// scheme is preserved for instances that
- * aren't served over TLS; everything else defaults to https.
+ * Resolve the githubHost setting into API and web base URLs. Accepts:
+ * - hostnames: github.example.com
+ * - urls: https://github.example.com
+ * - api urls: https://github.example.com/api/v3
  *
  * @param githubHost - The githubHost setting; empty means github.com
  */
@@ -50,7 +44,7 @@ export function resolveGitHubHost(githubHost: string): GitHubHostUrls {
 	const scheme = schemeMatch ? schemeMatch[1].toLowerCase() : "https";
 	const host = (schemeMatch ? schemeMatch[2] : configured)
 		.replace(/\/+$/, "")
-		.replace(/\/api\/v3$/i, "")   // user pasted the API URL instead of the host
+		.replace(/\/api\/v3$/i, "")
 		.replace(/\/+$/, "");
 
 	if (DOTCOM_ALIASES.has(host.toLowerCase())) {
@@ -67,17 +61,11 @@ export function resolveGitHubHost(githubHost: string): GitHubHostUrls {
 }
 
 /**
- * URL of the token creation page, pre-filled with the access FIT needs.
- *
- * Enterprise Server gets the classic token page: fine-grained tokens have to be
- * enabled by the instance administrator, while classic tokens are always available.
- * The `repo` scope is the narrowest classic scope that grants Contents: Read and Write.
+ * URL of the classic token creation page, pre-filled with the access FIT needs.
+ * fine-grained tokens also work, but are not turned on for all instances
  */
 export function tokenCreationUrl(urls: GitHubHostUrls): string {
-	if (urls.isEnterprise) {
-		return `${urls.webBaseUrl}/settings/tokens/new?description=Obsidian%20FIT&scopes=repo`;
-	}
-	return `${urls.webBaseUrl}/settings/personal-access-tokens/new?name=Obsidian%20FIT&description=Obsidian%20FIT%20plugin&contents=write`;
+	return `${urls.webBaseUrl}/settings/tokens/new?description=Obsidian%20FIT&scopes=repo`;
 }
 
 /** URL of the web view of a repository at a branch or commit. */
