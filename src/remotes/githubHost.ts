@@ -5,25 +5,19 @@
  * this handles differentiating github.com and self-hosted github instances - though they use the same api
  */
 
-export const DOTCOM_HOST = "github.com";
-
 /** Hosts that resolve to github.com rather than an Enterprise Server instance. */
-const DOTCOM_ALIASES = new Set([DOTCOM_HOST, "www.github.com", "api.github.com"]);
+const DOTCOM_ALIASES = new Set(["github.com", "www.github.com", "api.github.com"]);
 
 /** Where to reach a configured GitHub host, for API calls and for browser links. */
 export interface GitHubHostUrls {
-	host: string;         // Bare hostname, e.g. "github.com" or "github.example.com"
 	apiBaseUrl: string;   // Octokit baseUrl, e.g. "https://api.github.com"
 	webBaseUrl: string;   // Origin for user-facing links, e.g. "https://github.com"
-	isEnterprise: boolean;
 }
 
 // default hosts used when a specific host is not specified
 const DOTCOM_URLS: GitHubHostUrls = {
-	host: DOTCOM_HOST,
 	apiBaseUrl: "https://api.github.com",
 	webBaseUrl: "https://github.com",
-	isEnterprise: false,
 };
 
 /**
@@ -44,8 +38,7 @@ export function resolveGitHubHost(githubHost: string): GitHubHostUrls {
 	const scheme = schemeMatch ? schemeMatch[1].toLowerCase() : "https";
 	const host = (schemeMatch ? schemeMatch[2] : configured)
 		.replace(/\/+$/, "")
-		.replace(/\/api\/v3$/i, "")
-		.replace(/\/+$/, "");
+		.replace(/\/api\/v3$/i, "");
 
 	if (DOTCOM_ALIASES.has(host.toLowerCase())) {
 		return DOTCOM_URLS;
@@ -53,10 +46,8 @@ export function resolveGitHubHost(githubHost: string): GitHubHostUrls {
 
 	const webBaseUrl = `${scheme}://${host}`;
 	return {
-		host,
 		apiBaseUrl: `${webBaseUrl}/api/v3`,
 		webBaseUrl,
-		isEnterprise: true,
 	};
 }
 

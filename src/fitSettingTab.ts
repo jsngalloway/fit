@@ -364,13 +364,12 @@ export default class FitSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('advanced: GitHub host')
-			.setDesc('if using a GitHub Enterprise Server enter the host, leave blank for github.com')
+			.setName('GitHub host (advanced)')
+			.setDesc('If using a GitHub Enterprise Server enter the host, leave blank for github.com')
 			.addText(text => text
 				.setPlaceholder('github.com')
 				.setValue(this.plugin.settings.githubHost)
 				.onChange(async (value) => {
-					if (value === this.plugin.settings.githubHost) return;
 					this.plugin.settings.githubHost = value;
 					// Suggestions and the authenticated user belong to the previous host.
 					// Owner/repo/branch are left alone - they are still what the user asked to sync.

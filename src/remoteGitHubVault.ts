@@ -70,7 +70,7 @@ export class RemoteGitHubVault implements IVault<"remote"> {
 	private latestKnownState: FileStates | null = null;
 
 	/**
-	 * @param githubHost - github server host, defaults to github.com
+	 * @param githubHost - Enterprise Server host; empty means github.com
 	 */
 	constructor(
 		pat: string,
