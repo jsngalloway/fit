@@ -41,11 +41,11 @@ export function apiBaseUrl(githubHost: string): string {
 }
 
 /**
- * URL of the classic token creation page, pre-filled with the access FIT needs.
- * fine-grained tokens also work, but are not turned on for all instances
+ * URL of the fine-grained token creation page, pre-filled with the access FIT needs.
+ * classic tokens also work, but are less desirable from a security perspective
  */
 export function tokenCreationUrl(githubHost: string): string {
-	return `${webBaseUrl(githubHost)}/settings/tokens/new?description=Obsidian%20FIT&scopes=repo`;
+	return `${webBaseUrl(githubHost)}/settings/personal-access-tokens/new?name=Obsidian%20FIT&description=Obsidian%20FIT%20plugin&contents=write`;
 }
 
 /** URL of the web view of a repository at a branch or commit. */

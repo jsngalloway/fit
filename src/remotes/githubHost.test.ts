@@ -14,11 +14,11 @@ describe('githubHost', () => {
 		expect(webBaseUrl(githubHost)).toBe(expectedWebUrl);
 	});
 
-	it('links the classic token page on every host', () => {
+	it('links the fine-grained token page on every host', () => {
 		expect(tokenCreationUrl('github.example.com'))
-			.toBe('https://github.example.com/settings/tokens/new?description=Obsidian%20FIT&scopes=repo');
+			.toBe('https://github.example.com/settings/personal-access-tokens/new?name=Obsidian%20FIT&description=Obsidian%20FIT%20plugin&contents=write');
 		expect(tokenCreationUrl(''))
-			.toBe('https://github.com/settings/tokens/new?description=Obsidian%20FIT&scopes=repo');
+			.toBe('https://github.com/settings/personal-access-tokens/new?name=Obsidian%20FIT&description=Obsidian%20FIT%20plugin&contents=write');
 	});
 
 	it('builds tree URLs on the configured host', () => {
