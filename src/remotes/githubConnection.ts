@@ -14,7 +14,7 @@
 
 import { Octokit } from "@octokit/core";
 import { retry } from "@octokit/plugin-retry";
-import { resolveGitHubHost } from "./githubHost";
+import { apiBaseUrl } from "./githubHost";
 import { VaultError } from "../vault";
 
 /**
@@ -58,7 +58,7 @@ export class GitHubConnection {
 		const OctokitWithRetry = Octokit.plugin(retry);
 		this.octokit = new OctokitWithRetry({
 			auth: pat,
-			baseUrl: resolveGitHubHost(githubHost).apiBaseUrl,
+			baseUrl: apiBaseUrl(githubHost),
 			request: {
 				retries: 3,
 				doNotRetry: [400, 401, 403, 404, 422]

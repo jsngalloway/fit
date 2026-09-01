@@ -8,7 +8,7 @@
 import { LocalStores } from "@/localStores";
 import { Octokit } from "@octokit/core";
 import { retry } from "@octokit/plugin-retry";
-import { resolveGitHubHost } from "./remotes/githubHost";
+import { apiBaseUrl } from "./remotes/githubHost";
 import { ApplyChangesResult, IVault, VaultError, VaultReadResult } from "./vault";
 import { FileChange, FileStates } from "./util/changeTracking";
 import { BlobSha, CommitSha, EMPTY_TREE_SHA, TreeSha } from "./util/hashing";
@@ -69,9 +69,7 @@ export class RemoteGitHubVault implements IVault<"remote"> {
 	private latestKnownCommitSha: CommitSha | null = null;
 	private latestKnownState: FileStates | null = null;
 
-	/**
-	 * @param githubHost - Enterprise Server host; empty means github.com
-	 */
+	/** @param githubHost - Enterprise Server host; empty means github.com */
 	constructor(
 		pat: string,
 		owner: string,
@@ -84,7 +82,7 @@ export class RemoteGitHubVault implements IVault<"remote"> {
 		const OctokitWithRetry = Octokit.plugin(retry);
 		this.octokit = new OctokitWithRetry({
 			auth: pat,
-			baseUrl: resolveGitHubHost(githubHost).apiBaseUrl
+			baseUrl: apiBaseUrl(githubHost)
 			// Retry plugin operates silently - users will simply experience fewer rate limit errors
 			// Future: Could add verbose logging option to plugin settings
 		});

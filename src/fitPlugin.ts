@@ -10,7 +10,7 @@ import { fitLogger } from '@/logger';
 import { LocalStores, parseLocalStore } from '@/localStores';
 import { handleCriticalError } from '@/util/errorHandling';
 import { GitHubConnection } from '@/remotes/githubConnection';
-import { resolveGitHubHost, treeUrl } from '@/remotes/githubHost';
+import { treeUrl } from '@/remotes/githubHost';
 import * as Encryption from "@/encryption";
 import { FitSettings, DEFAULT_SETTINGS, findNewFields } from '@/fitSettings';
 
@@ -424,7 +424,7 @@ export default class FitPlugin extends Plugin {
 		const { owner, repo, autoSync, checkEveryXMinutes } = this.settings;
 		const sha = this.localStore.lastFetchedCommitSha;
 		const commitUrl = (owner && repo && sha)
-			? treeUrl(resolveGitHubHost(this.settings.githubHost), owner, repo, sha)
+			? treeUrl(this.settings.githubHost, owner, repo, sha)
 			: null;
 		const autoSyncInfo: AutoSyncInfo = {
 			enabled: autoSync !== 'off',

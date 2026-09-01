@@ -4,7 +4,7 @@ import { OBSIDIAN_ALWAYS_EXCLUDED, OBSIDIAN_NEEDS_MERGE } from "@/fit";
 import { App, PluginSettingTab, Setting, TextComponent } from "obsidian";
 import { setEqual } from "./utils";
 import { GitHubOwnerSuggest, GitHubRepoSuggest, ObsidianPathSuggest } from "./util/obsidianHelpers";
-import { resolveGitHubHost, tokenCreationUrl, treeUrl } from "./remotes/githubHost";
+import { tokenCreationUrl, treeUrl, webBaseUrl } from "./remotes/githubHost";
 import { VaultError } from "./vault";
 import { fitLogger } from "./logger";
 import FitNotice from "./fitNotice";
@@ -193,7 +193,7 @@ export default class FitSettingTab extends PluginSettingTab {
 	getLatestLink = (): string => {
 		const {owner, repo, branch, githubHost} = this.plugin.settings;
 		if (owner.length > 0 && repo.length > 0 && branch.length > 0) {
-			return treeUrl(resolveGitHubHost(githubHost), owner, repo, branch);
+			return treeUrl(githubHost, owner, repo, branch);
 		}
 		return "";
 	};
@@ -360,7 +360,7 @@ export default class FitSettingTab extends PluginSettingTab {
 				.setTooltip("Create a token")
 				.onClick(async ()=>{
 					// Resolved on click, not at render, so a host edit takes effect without reopening settings
-					window.open(tokenCreationUrl(resolveGitHubHost(this.plugin.settings.githubHost)), '_blank');
+					window.open(tokenCreationUrl(this.plugin.settings.githubHost), '_blank');
 				}));
 
 		new Setting(containerEl)
@@ -405,7 +405,7 @@ export default class FitSettingTab extends PluginSettingTab {
 				.setIcon('github')
 				.setTooltip("Create a new repository")
 				.onClick(() => {
-					window.open(`${resolveGitHubHost(this.plugin.settings.githubHost).webBaseUrl}/new`, '_blank');
+					window.open(`${webBaseUrl(this.plugin.settings.githubHost)}/new`, '_blank');
 				}));
 
 		// Repository owner combo box (supports both dropdown suggestions and freeform text)
