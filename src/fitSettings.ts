@@ -33,7 +33,7 @@ export interface FitSettings {
 	// See RemoteVaultProvider type in src/vault.ts for provider enum.
 	encryptionPassword: string;
 	pat: string;
-	githubHost: string;  // GitHub Enterprise Server hostname, github.com by default (see remotes/githubHost.ts)
+	githubHost: string;
 	owner: string;       // Owner of the repo (may differ from authenticated user for contributor repos)
 	avatarUrl: string;
 	repo: string;

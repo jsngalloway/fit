@@ -371,8 +371,6 @@ export default class FitSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.githubHost)
 				.onChange((value) => {
 					this.plugin.settings.githubHost = value;
-					// Suggestions and the authenticated user belong to the previous host.
-					// Owner/repo/branch are left alone - they are still what the user asked to sync.
 					this.clearAuthState();
 					this.suggestedOwners = [];
 					this.ownerSuggest?.updateSuggestions([]);
@@ -400,7 +398,7 @@ export default class FitSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(containerEl)
-			.setDesc("Make sure you are logged in to GitHub on your browser.")
+			.setDesc("Make sure you are logged in to github on your browser.")
 			.addExtraButton(button => button
 				.setIcon('github')
 				.setTooltip("Create a new repository")

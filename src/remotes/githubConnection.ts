@@ -52,7 +52,6 @@ export class GitHubConnection {
 	// Cached authenticated user info (populated on first getAuthenticatedUser call)
 	private cachedAuthUser: AuthenticatedUser | null = null;
 
-	/** @param githubHost - Hostname to connect to */
 	constructor(pat: string, githubHost: string) {
 		this.pat = pat;
 		const OctokitWithRetry = Octokit.plugin(retry);
